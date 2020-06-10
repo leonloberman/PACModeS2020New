@@ -127,7 +127,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("v1")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("v3")>  _
         Public Property PPSymbolsType() As String
             Get
                 Return CType(Me("PPSymbolsType"),String)

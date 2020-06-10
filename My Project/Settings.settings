@@ -21,7 +21,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PPSymbolsType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">v1</Value>
+      <Value Profile="(Default)">v3</Value>
     </Setting>
     <Setting Name="NewBSLoc" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
