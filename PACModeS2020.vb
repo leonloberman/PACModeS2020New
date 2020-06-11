@@ -68,6 +68,110 @@ Public Class PacModeS2020
             Return ConnectString
         End Get
     End Property
+    Private Sub PACModes2020_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+        If My.Settings.Default.UpgradeRequired Then
+#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+            My.Settings.Default.Upgrade()
+#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+            My.Settings.Default.UpgradeRequired = False
+#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+            My.Settings.Default.Save()
+#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
+        End If
+
+        'Application Upgrade Check
+        Dim BasicAuthentication As BasicAuthentication = New BasicAuthentication("pad", "Blackmrs99")
+        AutoUpdater.BasicAuthXML = BasicAuthentication
+        'AutoUpdater.ReportErrors = True
+        AutoUpdater.ShowSkipButton = False
+        'AutoUpdater.Mandatory = True
+        'AutoUpdater.Synchronous = True
+        AutoUpdater.Start("https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml")
+
+        'logged.mdb version check
+        Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
+                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
+                }
+        'Try
+        '    Con.Open()
+        'Catch ex As Exception
+        '    MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+        'End Try
+
+        Dim cmdObj As New OleDbCommand("Select Version from LoggedmdbVersionNo", con)
+        Try
+            If con.State = ConnectionState.Closed Then con.Open()
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+        End Try
+        Using VersionRdr As OleDbDataReader = cmdObj.ExecuteReader
+            While VersionRdr.Read()
+                Currentloggedversion = VersionRdr("Version")
+            End While
+            con.Close()
+        End Using
+
+        'ICAOCodes.mdb version check
+        con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
+                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
+                }
+        Try
+            con.Open()
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+        End Try
+
+        cmdObj = New OleDbCommand("Select Version from ICAOCodesVersionNo", con)
+
+        Using con
+            Try
+                If con.State = ConnectionState.Closed Then con.Open()
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+            End Try
+            Using ICAOVersionRdr As OleDbDataReader = cmdObj.ExecuteReader
+                While ICAOVersionRdr.Read
+                    CurrentICAOversion = ICAOVersionRdr("Version")
+                End While
+            End Using
+            con.Close()
+        End Using
+
+        Label7.Text += My.Application.Info.Version.ToString
+        Label8.Text += Currentloggedversion.ToString
+        Label3.Text += CurrentICAOversion.ToString
+        TextBox1.Text = My.Settings.BSloc
+        TextBox2.Text = My.Settings.BSBackupLoc
+        BSLoc = My.Settings.BSloc
+        BSBackupLoc = My.Settings.BSBackupLoc
+        If My.Settings.InterestedButton = True Then
+            RadioButton2.Checked = True
+        ElseIf My.Settings.RQPsButton = True Then
+            RadioButton1.Checked = True
+        End If
+        If My.Settings.PPSymbols = True Then
+            CheckBox1.Checked = True
+        End If
+        If My.Settings.PPSymbolsType = "v1" Then
+            RadioButton7.Checked = True
+        ElseIf My.Settings.PPSymbolsType = "v3" Then
+            RadioButton8.Checked = True
+        End If
+        If My.Settings.OperatorFlags = "Kinetic" Then
+            RadioButton5.Checked = True
+        ElseIf My.Settings.OperatorFlags = "GFIA" Then
+            RadioButton6.Checked = True
+        Else
+            RadioButton9.Checked = True
+        End If
+
+
+    End Sub
 
     Public Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
 
@@ -1631,110 +1735,6 @@ ENDSUB:
 
     End Sub
 
-    Private Sub PACModes2020_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-        If My.Settings.Default.UpgradeRequired Then
-#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-            My.Settings.Default.Upgrade()
-#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-            My.Settings.Default.UpgradeRequired = False
-#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-#Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-            My.Settings.Default.Save()
-#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-        End If
-
-        'Application Upgrade Check
-        Dim BasicAuthentication As BasicAuthentication = New BasicAuthentication("pad", "Blackmrs99")
-        AutoUpdater.BasicAuthXML = BasicAuthentication
-        'AutoUpdater.ReportErrors = True
-        AutoUpdater.ShowSkipButton = False
-        'AutoUpdater.Mandatory = True
-        'AutoUpdater.Synchronous = True
-        AutoUpdater.Start("https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml")
-
-        'logged.mdb version check
-        Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
-                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
-                }
-        'Try
-        '    Con.Open()
-        'Catch ex As Exception
-        '    MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
-        'End Try
-
-        Dim cmdObj As New OleDbCommand("Select Version from LoggedmdbVersionNo", con)
-        Try
-            If con.State = ConnectionState.Closed Then con.Open()
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
-        End Try
-        Using VersionRdr As OleDbDataReader = cmdObj.ExecuteReader
-            While VersionRdr.Read()
-                Currentloggedversion = VersionRdr("Version")
-            End While
-            con.Close()
-        End Using
-
-        'ICAOCodes.mdb version check
-        con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
-                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
-                }
-        Try
-            Con.Open()
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
-        End Try
-
-        cmdObj = New OleDbCommand("Select Version from ICAOCodesVersionNo", Con)
-
-        Using Con
-            Try
-                If Con.State = ConnectionState.Closed Then Con.Open()
-            Catch ex As Exception
-                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
-            End Try
-            Using ICAOVersionRdr As OleDbDataReader = cmdObj.ExecuteReader
-                While ICAOVersionRdr.Read
-                    CurrentICAOversion = ICAOVersionRdr("Version")
-                End While
-            End Using
-            Con.Close()
-        End Using
-
-        Label7.Text += My.Application.Info.Version.ToString
-        Label8.Text += Currentloggedversion.ToString
-        Label3.Text += CurrentICAOversion.ToString
-        TextBox1.Text = My.Settings.BSloc
-        TextBox2.Text = My.Settings.BSBackupLoc
-        BSLoc = My.Settings.BSloc
-        BSBackupLoc = My.Settings.BSBackupLoc
-        If My.Settings.InterestedButton = True Then
-            RadioButton2.Checked = True
-        ElseIf My.Settings.RQPsbutton = True Then
-            RadioButton1.Checked = True
-        End If
-        If My.Settings.PPSymbols = True Then
-            CheckBox1.Checked = True
-        End If
-        If My.Settings.PPSymbolsType = "v1" Then
-            RadioButton7.Checked = True
-        ElseIf My.Settings.PPSymbolsType = "v3" Then
-            RadioButton8.Checked = True
-        End If
-        If My.Settings.OperatorFlags = "Kinetic" Then
-            RadioButton5.Checked = True
-        ElseIf My.Settings.OperatorFlags = "GFIA" Then
-            RadioButton6.Checked = True
-        Else
-            RadioButton9.Checked = True
-        End If
-
-
-    End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
