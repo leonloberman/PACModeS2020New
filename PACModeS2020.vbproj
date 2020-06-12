@@ -86,6 +86,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckforUpgrade.vb" />
     <Compile Include="SQLforAccess.vb" />
     <Compile Include="DBCompact.vb" />
     <Compile Include="PACModeS2020.vb">

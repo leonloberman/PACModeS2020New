@@ -57,6 +57,8 @@ Public Class PacModeS2020
     Public Currentloggedversion As Integer
     Public CurrentICAOversion As Integer
 
+
+
     Public Shared ReadOnly Property ConnectString1 As String
         Get
             Return ConnectString2
@@ -142,6 +144,8 @@ Public Class PacModeS2020
             con.Close()
         End Using
 
+        AddHandler AutoUpdater.CheckForUpdateEvent, AddressOf ICAOCodes_changed
+
         Label7.Text += My.Application.Info.Version.ToString
         Label8.Text += Currentloggedversion.ToString
         Label3.Text += CurrentICAOversion.ToString
@@ -171,6 +175,10 @@ Public Class PacModeS2020
         End If
 
 
+    End Sub
+
+    Private Sub ICAOCodes_changed(args As UpdateInfoEventArgs)
+        UpgradeCheck("C:\ModeS\ICAOCodes.mdb")
     End Sub
 
     Public Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
