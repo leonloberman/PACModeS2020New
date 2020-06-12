@@ -93,17 +93,13 @@ Public Class PacModeS2020
         AutoUpdater.ShowSkipButton = False
         'AutoUpdater.Mandatory = True
         'AutoUpdater.Synchronous = True
+        AutoUpdater.UpdateFormSize = New System.Drawing.Size(800, 600)
         AutoUpdater.Start("https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml")
 
-        'logged.mdb version check
+        'get logged.mdb version
         Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
                     .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
                 }
-        'Try
-        '    Con.Open()
-        'Catch ex As Exception
-        '    MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
-        'End Try
 
         Dim cmdObj As New OleDbCommand("Select Version from LoggedmdbVersionNo", con)
         Try
@@ -118,7 +114,7 @@ Public Class PacModeS2020
             con.Close()
         End Using
 
-        'ICAOCodes.mdb version check
+        'get ICAOCodes.mdb version
         con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
                     .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
                 }
