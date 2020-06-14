@@ -56,6 +56,9 @@ Partial Class PacModeS2020
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.RadioButton6 = New System.Windows.Forms.RadioButton()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.ProgressBar2 = New System.Windows.Forms.ProgressBar()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -370,11 +373,33 @@ Partial Class PacModeS2020
         'Timer1
         '
         '
+        'ProgressBar2
+        '
+        Me.ProgressBar2.Location = New System.Drawing.Point(352, 33)
+        Me.ProgressBar2.Name = "ProgressBar2"
+        Me.ProgressBar2.Size = New System.Drawing.Size(100, 13)
+        Me.ProgressBar2.TabIndex = 72
+        Me.ProgressBar2.Visible = False
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.Green
+        Me.Label9.Location = New System.Drawing.Point(352, 33)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(123, 13)
+        Me.Label9.TabIndex = 73
+        Me.Label9.Text = "ICAOCodes Updated"
+        Me.Label9.Visible = False
+        '
         'PacModeS2020
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 842)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.ProgressBar2)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label7)
@@ -445,4 +470,7 @@ Partial Class PacModeS2020
     Friend WithEvents RadioButton5 As RadioButton
     Friend WithEvents RadioButton6 As RadioButton
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents ProgressBar2 As ProgressBar
+    Friend WithEvents Label9 As Label
+    Friend WithEvents Timer2 As Timer
 End Class

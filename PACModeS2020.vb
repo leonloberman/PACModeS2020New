@@ -2,13 +2,14 @@
 Imports System.Data.OleDb
 Imports System.IO
 Imports System.Data.SQLite
-Imports System.Net
 Imports AutoUpdaterDotNET
+Imports System.Net
 
 Public Class PacModeS2020
     Private Const ConnectString As String = "Provider=System.Data.SQLite;DataSource=:memory:;New=True;"
     Public Con As OleDbConnection
     Public ReadOnly DBName As String = "C:\Modes\logged.mdb"
+    Public ReadOnly ICAOName As String = "C:\Modes\ICAOCodes.mdb"
     Private ReadOnly CompactedDBName As String
     Private BSLoc As String
     Private BSBackupLoc As String
@@ -56,6 +57,7 @@ Public Class PacModeS2020
 
     Public Currentloggedversion As Integer
     Public CurrentICAOversion As Integer
+    Public AutoUpdaterFile As String = "https://www.gfiapac.org/ModeSVersions/PACModeS2020TestVersion.xml"
 
 
 
@@ -70,8 +72,9 @@ Public Class PacModeS2020
             Return ConnectString
         End Get
     End Property
-    Private Sub PACModes2020_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+
+    Private Sub PACModes2020_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #Disable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
         If My.Settings.Default.UpgradeRequired Then
 #Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
@@ -86,15 +89,16 @@ Public Class PacModeS2020
 #Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
         End If
 
+
         'Application Upgrade Check
         Dim BasicAuthentication As BasicAuthentication = New BasicAuthentication("pad", "Blackmrs99")
         AutoUpdater.BasicAuthXML = BasicAuthentication
-        'AutoUpdater.ReportErrors = True
+        AutoUpdater.ReportErrors = True
         AutoUpdater.ShowSkipButton = False
         'AutoUpdater.Mandatory = True
         'AutoUpdater.Synchronous = True
         AutoUpdater.UpdateFormSize = New System.Drawing.Size(800, 600)
-        AutoUpdater.Start("https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml")
+        AutoUpdater.Start(AutoUpdaterFile)
 
         'get logged.mdb version
         Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
@@ -140,7 +144,7 @@ Public Class PacModeS2020
             con.Close()
         End Using
 
-        AddHandler AutoUpdater.CheckForUpdateEvent, AddressOf ICAOCodes_changed
+        AddHandler AutoUpdater.CheckForUpdateEvent, AddressOf AutoUpdaterOnCheckForUpdateEvent
 
         Label7.Text += My.Application.Info.Version.ToString
         Label8.Text += Currentloggedversion.ToString
@@ -173,8 +177,61 @@ Public Class PacModeS2020
 
     End Sub
 
-    Private Sub ICAOCodes_changed(args As UpdateInfoEventArgs)
-        UpgradeCheck("C:\ModeS\ICAOCodes.mdb")
+    Private Sub AutoUpdaterOnCheckForUpdateEvent(ByVal args As UpdateInfoEventArgs)
+        If args IsNot Nothing Then
+
+            If args.IsUpdateAvailable Then
+
+                AutoUpdater.ShowUpdateForm(args)
+
+            Else
+                'MessageBox.Show("There is no update available please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                If My.Computer.Network.Ping("www.google.com") Then
+                    UpgradeCheck("C:\ModeS\ICAOCodes.mdb")
+                Else
+                    MsgBox("Computer is not connected to the internet.")
+                End If
+            End If
+        Else
+            MessageBox.Show("There is a problem reaching update server please check your internet connection and try again later.", "Update check failed", MessageBoxButtons.OK, MessageBoxIcon.[Error])
+        End If
+    End Sub
+
+
+    Private Sub Timer2_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer2.Tick
+        ProgressBar2.Visible = True
+        ProgressBar2.Value += 10
+        If ProgressBar2.Value = 100 Then
+            Timer2.Stop()
+            ProgressBar2.Visible = False
+            Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & ICAOName & "") With {
+                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & ICAOName & ""
+                }
+            Try
+                con.Open()
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+            End Try
+
+            Dim cmdObj As New OleDbCommand("Select Version from VersionNo", con)
+            Using con
+                Try
+                    If con.State = ConnectionState.Closed Then con.Open()
+                Catch ex As Exception
+                    MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+                End Try
+                Using ICAOVersionRdr As OleDbDataReader = cmdObj.ExecuteReader
+                    While ICAOVersionRdr.Read
+                        CurrentICAOversion = ICAOVersionRdr("Version")
+                    End While
+                End Using
+                con.Close()
+            End Using
+            Label3.Text = "ICAOCodes Version: " + CurrentICAOversion.ToString
+            Label9.Visible = True
+            'End If
+        End If
+
     End Sub
 
     Public Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -1831,14 +1888,14 @@ ENDSUB:
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
         RadioButton1.Enabled = True
-        My.Settings.RQPsbutton = True
+        My.Settings.RQPsButton = True
         My.Settings.InterestedButton = False
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
         RadioButton2.Enabled = True
         My.Settings.InterestedButton = True
-        My.Settings.RQPsbutton = False
+        My.Settings.RQPsButton = False
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
