@@ -57,7 +57,7 @@ Public Class PacModeS2020
 
     Public Currentloggedversion As Integer
     Public CurrentICAOversion As Integer
-    Public AutoUpdaterFile As String = "https://www.gfiapac.org/ModeSVersions/PACModeS2020TestVersion.xml"
+    Public AutoUpdaterFile As String = "https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml"
 
 
 
