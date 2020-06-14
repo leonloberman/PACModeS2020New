@@ -160,11 +160,12 @@ Public Class PacModeS2020
         End If
         If My.Settings.PPSymbols = True Then
             CheckBox1.Checked = True
-        End If
-        If My.Settings.PPSymbolsType = "v1" Then
-            RadioButton7.Checked = True
-        ElseIf My.Settings.PPSymbolsType = "v3" Then
-            RadioButton8.Checked = True
+            If My.Settings.PPSymbolsType = "v1" Then
+                RadioButton7.Checked = True
+            ElseIf My.Settings.PPSymbolsType = "v3" Then
+                RadioButton8.Checked = True
+            End If
+        Else CheckBox1.Checked = False
         End If
         If My.Settings.OperatorFlags = "Kinetic" Then
             RadioButton5.Checked = True
