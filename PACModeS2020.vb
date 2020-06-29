@@ -1077,7 +1077,6 @@ BSBackupStep:
         End Try
         SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
 
-        SetLabelText_ThreadSafe(Label1, vbCrLf + "Build Aircraft Indices", Color.Yellow, 0)
 
 
         SetLabelText_ThreadSafe(Label1, vbCrLf + "Selecting from Allhex datatable", Color.Yellow, 0)
@@ -1156,6 +1155,9 @@ BSBackupStep:
         Catch
 
         End Try
+
+        SetLabelText_ThreadSafe(Label1, vbCrLf + "Build Aircraft Indices", Color.Yellow, 0)
+
 
         Try
 
