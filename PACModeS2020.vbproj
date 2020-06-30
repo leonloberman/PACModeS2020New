@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\x86\1.0.0.17\</OutputPath>
+    <OutputPath>bin\Debug\x86\1.0.0.18\</OutputPath>
     <DocumentationFile>PACModeS2020.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\x86\1.0.0.17\</OutputPath>
+    <OutputPath>bin\Release\x86\1.0.0.18\</OutputPath>
     <DocumentationFile>PACModeS2020.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
