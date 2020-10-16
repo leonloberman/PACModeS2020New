@@ -176,6 +176,11 @@ Public Class PacModeS2020
         Else
             RadioButton9.Checked = True
         End If
+        If My.Settings.NullOpFlags = True Then
+            CheckBox3.Checked = True
+        Else
+            CheckBox3.Checked = False
+        End If
 
 
     End Sub
@@ -463,31 +468,34 @@ BSBackupStep:
                              " WHERE (((logLLp.ID)=[Allhex].[AircraftID]) AND ((logLLp.Registration)=[Allhex].[Registration]));", DBName)
             SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
 
-            SetLabelText_ThreadSafe(Label1, vbCrLf + "Updating Interested field for Mil only", Color.Yellow, 0)
-            AccessSQL("UPDATE Allhex SET Interested = TRUE, LastModified = Now()" &
-                         " WHERE UserInt1 = 502 ;", DBName)
-            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+            If RadioButton10.Checked = False Then
+                SetLabelText_ThreadSafe(Label1, vbCrLf + "Updating Interested field for Mil only", Color.Yellow, 0)
+                AccessSQL("UPDATE Allhex SET Interested = TRUE, LastModified = Now()" &
+                             " WHERE UserInt1 = 502 ;", DBName)
+                SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+            End If
+
 
             SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting UserTag = Ps as appropriate", Color.Yellow, 0)
-            AccessSQL("UPDATE Allhex INNER JOIN loggedhex ON (loggedhex.ID = Allhex.AircraftID) SET Allhex.UserTag = " & """Ps""" & ", Allhex.LastModified = Now()" &
-                        " WHERE (((Allhex.AircraftID)=[loggedhex].[ID]) AND ((Allhex.Registration)<>[loggedhex].[Registration]));", DBName)
+                AccessSQL("UPDATE Allhex INNER JOIN loggedhex ON (loggedhex.ID = Allhex.AircraftID) SET Allhex.UserTag = " & """Ps""" & ", Allhex.LastModified = Now()" &
+                        " WHERE (((Allhex.AircraftID)=[loggedhex].[ID]) And ((Allhex.Registration)<>[loggedhex].[Registration]));", DBName)
 
-            'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 1
-            AccessSQL("INSERT INTO Ps_Reset ( Registration, AircraftID, Hex )" &
+                'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 1
+                AccessSQL("INSERT INTO Ps_Reset ( Registration, AircraftID, Hex )" &
                       " SELECT DISTINCT logLLp.Registration,  logLLp.ID AS AircraftID, tbldataset.Hex" &
                       " FROM ((logLLp INNER JOIN tblOperatorHistory ON logLLp.ID = tblOperatorHistory.ID) INNER JOIN tbldataset ON logLLp.ID = tbldataset.ID)" &
                       " INNER JOIN Allhex ON logLLp.ID = Allhex.AircraftID" &
                       " WHERE (((logLLp.Registration) In (select tblOperatorHistory.previous from tblOperatorHistory)));", DBName)
 
-            'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 2
-            AccessSQL("UPDATE Allhex INNER JOIN Ps_Reset ON Allhex.AircraftID = Ps_Reset.AircraftID" &
+                'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 2
+                AccessSQL("UPDATE Allhex INNER JOIN Ps_Reset ON Allhex.AircraftID = Ps_Reset.AircraftID" &
                       " SET allhex.UserTag = NULL, allhex.LastModified = Now()" &
                       " Where allhex.Registration in (select registration from Ps_Reset);", DBName)
-            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
-        End If
+                SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+            End If
 
-        'Update Allhex with correct Airbus NEO and B737Max ICAO Type codes
-        SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting correct ICAO Type codes for Airbus NEO family", Color.Yellow, 0)
+            'Update Allhex with correct Airbus NEO and B737Max ICAO Type codes
+            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting correct ICAO Type codes for Airbus NEO family", Color.Yellow, 0)
         AccessSQL("UPDATE Allhex INNER JOIN tbldataset ON Allhex.AircraftID = tbldataset.ID " &
                   "SET Allhex.ICAOTypeCode = 'A20N' WHERE (((tbldataset.FKvariant) in (16897, 9000539)));", DBName)
         AccessSQL("UPDATE Allhex INNER JOIN tbldataset ON Allhex.AircraftID = tbldataset.ID " &
@@ -503,6 +511,15 @@ BSBackupStep:
                   "SET Allhex.ICAOTypeCode = 'B39M' WHERE (((tbldataset.FKvariant) in (9000980)));", DBName)
         SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
 
+        If RadioButton10.Checked = True Then
+            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting all RQ/Ps to Interested", Color.Yellow, 0)
+            AccessSQL("UPDATE Allhex SET Interested = TRUE, LastModified = Now()" &
+                             " WHERE (UserTag = " & """Ps""" & ")" &
+                    " OR (UserTag = " & """RQ""" & ");", DBName)
+            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
+        End If
+
         If CheckBox1.Checked = True Then
             Select Case RadioButton7.Checked
                 Case True
@@ -517,6 +534,7 @@ BSBackupStep:
                           " allhex.UserString1 = PP_SymbolsByType.UserString1_v3;", DBName)
                     SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
             End Select
+
 
             SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting PlanePlotter Symbols", Color.Yellow, 0)
             AccessSQL("UPDATE Allhex Set Allhex.UserTag = Allhex.UserTag & AllHex.UserString1;", DBName)
@@ -543,12 +561,15 @@ BSBackupStep:
             SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
         End If
 
-        If RadioButton10.Checked = True Then
-            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting all RQ/Ps to Interested", Color.Yellow, 0)
-            AccessSQL("UPDATE Allhex Set Interested = TRUE where UserTag Like ('RQ*') or UserTag Like ('Ps*')", DBName)
-            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+        If CheckBox3.Checked = True Then
+            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting No Null Operator Flags", Color.Yellow, 0)
 
+            AccessSQL("UPDATE Allhex Set Allhex.OperatorFlagCode = ICAOTypeCode WHERE" &
+                      " (Allhex.OperatorFlagCode = '-' or Allhex.OperatorFlagCode IS NULL);", DBName)
+
+            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
         End If
+
 
         'Open connection to BaseStation
         Try
@@ -1915,12 +1936,14 @@ ENDSUB:
         RadioButton1.Enabled = True
         My.Settings.RQPsButton = True
         My.Settings.InterestedButton = False
+        My.Settings.RQPsandIButton = False
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
         RadioButton2.Enabled = True
         My.Settings.InterestedButton = True
         My.Settings.RQPsButton = False
+        My.Settings.RQPsandIButton = False
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -1978,5 +2001,14 @@ ENDSUB:
         RadioButton10.Enabled = True
         My.Settings.RQPsandIButton = True
         My.Settings.InterestedButton = False
+        My.Settings.RQPsButton = False
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        If CheckBox3.Checked = True Then
+            My.Settings.NullOpFlags = True
+        Else
+            My.Settings.NullOpFlags = False
+        End If
     End Sub
 End Class

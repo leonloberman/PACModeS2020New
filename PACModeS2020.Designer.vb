@@ -43,6 +43,7 @@ Partial Class PacModeS2020
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.RadioButton10 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.Button5 = New System.Windows.Forms.Button()
@@ -59,7 +60,7 @@ Partial Class PacModeS2020
         Me.ProgressBar2 = New System.Windows.Forms.ProgressBar()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
-        Me.RadioButton10 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -252,6 +253,17 @@ Partial Class PacModeS2020
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "RQ/Ps or Interested for All"
         '
+        'RadioButton10
+        '
+        Me.RadioButton10.AutoSize = True
+        Me.RadioButton10.Location = New System.Drawing.Point(23, 97)
+        Me.RadioButton10.Name = "RadioButton10"
+        Me.RadioButton10.Size = New System.Drawing.Size(155, 17)
+        Me.RadioButton10.TabIndex = 12
+        Me.RadioButton10.TabStop = True
+        Me.RadioButton10.Text = "Set Interested for all RQ/Ps"
+        Me.RadioButton10.UseVisualStyleBackColor = True
+        '
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = True
@@ -334,7 +346,7 @@ Partial Class PacModeS2020
         Me.GroupBox3.Controls.Add(Me.RadioButton6)
         Me.GroupBox3.Location = New System.Drawing.Point(142, 306)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(244, 40)
+        Me.GroupBox3.Size = New System.Drawing.Size(227, 40)
         Me.GroupBox3.TabIndex = 67
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Which Operator Flags?"
@@ -398,22 +410,22 @@ Partial Class PacModeS2020
         'Timer2
         '
         '
-        'RadioButton10
+        'CheckBox3
         '
-        Me.RadioButton10.AutoSize = True
-        Me.RadioButton10.Location = New System.Drawing.Point(23, 97)
-        Me.RadioButton10.Name = "RadioButton10"
-        Me.RadioButton10.Size = New System.Drawing.Size(96, 17)
-        Me.RadioButton10.TabIndex = 12
-        Me.RadioButton10.TabStop = True
-        Me.RadioButton10.Text = "RadioButton10"
-        Me.RadioButton10.UseVisualStyleBackColor = True
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(386, 323)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(133, 17)
+        Me.CheckBox3.TabIndex = 74
+        Me.CheckBox3.Text = "No Null Operator Flags"
+        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'PacModeS2020
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 842)
+        Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.ProgressBar2)
         Me.Controls.Add(Me.Label8)
@@ -490,4 +502,5 @@ Partial Class PacModeS2020
     Friend WithEvents Label9 As Label
     Friend WithEvents Timer2 As Timer
     Friend WithEvents RadioButton10 As RadioButton
+    Friend WithEvents CheckBox3 As CheckBox
 End Class
