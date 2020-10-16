@@ -59,6 +59,7 @@ Partial Class PacModeS2020
         Me.ProgressBar2 = New System.Windows.Forms.ProgressBar()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
+        Me.RadioButton10 = New System.Windows.Forms.RadioButton()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -98,7 +99,7 @@ Partial Class PacModeS2020
         Me.GroupBox4.Controls.Add(Me.RadioButton8)
         Me.GroupBox4.Location = New System.Drawing.Point(145, 267)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(241, 33)
+        Me.GroupBox4.Size = New System.Drawing.Size(224, 33)
         Me.GroupBox4.TabIndex = 68
         Me.GroupBox4.TabStop = False
         '
@@ -145,7 +146,7 @@ Partial Class PacModeS2020
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(375, 253)
+        Me.CheckBox2.Location = New System.Drawing.Point(386, 279)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(205, 17)
         Me.CheckBox2.TabIndex = 64
@@ -241,11 +242,12 @@ Partial Class PacModeS2020
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.RadioButton10)
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
         Me.GroupBox1.Location = New System.Drawing.Point(352, 141)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(200, 100)
+        Me.GroupBox1.Size = New System.Drawing.Size(200, 120)
         Me.GroupBox1.TabIndex = 58
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "RQ/Ps or Interested for All"
@@ -393,6 +395,20 @@ Partial Class PacModeS2020
         Me.Label9.Text = "ICAOCodes Updated"
         Me.Label9.Visible = False
         '
+        'Timer2
+        '
+        '
+        'RadioButton10
+        '
+        Me.RadioButton10.AutoSize = True
+        Me.RadioButton10.Location = New System.Drawing.Point(23, 97)
+        Me.RadioButton10.Name = "RadioButton10"
+        Me.RadioButton10.Size = New System.Drawing.Size(96, 17)
+        Me.RadioButton10.TabIndex = 12
+        Me.RadioButton10.TabStop = True
+        Me.RadioButton10.Text = "RadioButton10"
+        Me.RadioButton10.UseVisualStyleBackColor = True
+        '
         'PacModeS2020
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -473,4 +489,5 @@ Partial Class PacModeS2020
     Friend WithEvents ProgressBar2 As ProgressBar
     Friend WithEvents Label9 As Label
     Friend WithEvents Timer2 As Timer
+    Friend WithEvents RadioButton10 As RadioButton
 End Class

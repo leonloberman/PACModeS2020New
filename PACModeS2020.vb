@@ -157,6 +157,8 @@ Public Class PacModeS2020
             RadioButton2.Checked = True
         ElseIf My.Settings.RQPsButton = True Then
             RadioButton1.Checked = True
+        ElseIf My.Settings.RQPsandIButton = True Then
+            RadioButton10.Checked = True
         End If
         If My.Settings.PPSymbols = True Then
             CheckBox1.Checked = True
@@ -448,7 +450,7 @@ BSBackupStep:
 
         End If
 
-        If RadioButton1.Checked = True Then
+        If RadioButton1.Checked = True Or RadioButton10.Checked = True Then
 
             SetLabelText_ThreadSafe(Label1, vbCrLf + "Clearing User Tag fields", Color.Yellow, 0)
             AccessSQL("Update Allhex SET UserTag = " & """RQ""" & " WHERE (UserTag = " & """Ps""" & ")" &
@@ -539,6 +541,13 @@ BSBackupStep:
                             "AND ((Kinetic_Operator_Flags.AircraftID)=[Allhex].[AircraftID]));", DBName)
 
             SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+        End If
+
+        If RadioButton10.Checked = True Then
+            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting all RQ/Ps to Interested", Color.Yellow, 0)
+            AccessSQL("UPDATE Allhex Set Interested = TRUE where UserTag Like ('RQ*') or UserTag Like ('Ps*')", DBName)
+            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
         End If
 
         'Open connection to BaseStation
@@ -1551,7 +1560,7 @@ QuickUpdate:
 
                 GoTo ENDSUB
 
-            ElseIf RadioButton1.Checked = True Then 'Set RQ/Ps for all and Interested for Mil only
+            ElseIf RadioButton1.Checked = True Or RadioButton10.Checked = True Then 'Set RQ/Ps for all and Interested for Mil only
 
                 Try
                     SetLabelText_ThreadSafe(Label1, vbCrLf + "Clearing User Tag fields", Color.Yellow, 0)
@@ -1690,6 +1699,19 @@ QuickUpdate:
                 End Try
 
                 SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
+                If RadioButton10.Checked = True Then
+                    Try
+                        SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting all RQ/Ps to Interested", Color.Yellow, 0)
+                        BS_SQL1 = "Update Aircraft SET Interested = TRUE where UserTag Contains " & """RQ*"" " & " OR UserTag Contains " & """Ps*""" & ";"
+                        Dim cmd2 As New SQLiteCommand(BS_SQL1, BS_Con)
+                        cmd2.ExecuteNonQuery()
+                    Catch ex As System.Exception
+                        System.Windows.Forms.MessageBox.Show(ex.Message)
+                    End Try
+
+                End If
+
 
                 If CheckBox1.Checked = True Then
 
@@ -1952,4 +1974,9 @@ ENDSUB:
         End If
     End Sub
 
+    Private Sub RadioButton10_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton10.CheckedChanged
+        RadioButton10.Enabled = True
+        My.Settings.RQPsandIButton = True
+        My.Settings.InterestedButton = False
+    End Sub
 End Class
