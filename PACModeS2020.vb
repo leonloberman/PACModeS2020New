@@ -1341,11 +1341,26 @@ BSBackupStep:
                         WHERE Aircraft.ModeS = PersonalFlags.ModeS);
 
                         DROP TABLE Personalflags;"
+
                 daBSCommand = New SQLiteCommand(BS_SQL1, BS_Con_mem)
                 daBSCommand.ExecuteNonQuery()
             Catch ex As Exception
                 System.Windows.Forms.MessageBox.Show(ex.Message)
             End Try
+            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
+            If CheckBox3.Checked = True Then
+                Try
+
+                    SetLabelText_ThreadSafe(Label1, vbCrLf + "Update Personal Flags to Set No Null Operator Flags", Color.Yellow, 0)
+                    BS_SQL1 = "UPDATE Aircraft Set OperatorFlagCode = ICAOTypeCode WHERE (OperatorFlagCode = '-' or OperatorFlagCode ISNULL);"
+
+                    daBSCommand = New SQLiteCommand(BS_SQL1, BS_Con_mem)
+                    daBSCommand.ExecuteNonQuery()
+                Catch ex As Exception
+                    System.Windows.Forms.MessageBox.Show(ex.Message)
+                End Try
+            End If
 
             SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
         End If
