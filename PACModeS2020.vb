@@ -1974,18 +1974,21 @@ ENDSUB:
 
     Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
         If RadioButton5.Enabled = True Then
+            CheckBox3.Enabled = True
             My.Settings.OperatorFlags = "Kinetic"
         End If
     End Sub
 
     Private Sub RadioButton6_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton6.CheckedChanged
         If RadioButton6.Enabled = True Then
+            CheckBox3.Enabled = False
             My.Settings.OperatorFlags = "GFIA"
         End If
     End Sub
 
     Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
         If RadioButton9.Enabled = True Then
+            CheckBox3.Enabled = True
             My.Settings.OperatorFlags = "Personal"
         End If
     End Sub
