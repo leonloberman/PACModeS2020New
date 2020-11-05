@@ -89,17 +89,6 @@ Public Class PacModeS2020
 #Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
         End If
 
-
-        'Application Upgrade Check
-        Dim BasicAuthentication As BasicAuthentication = New BasicAuthentication("pad", "Blackmrs99")
-        AutoUpdater.BasicAuthXML = BasicAuthentication
-        AutoUpdater.ReportErrors = True
-        AutoUpdater.ShowSkipButton = False
-        'AutoUpdater.Mandatory = True
-        'AutoUpdater.Synchronous = True
-        AutoUpdater.UpdateFormSize = New System.Drawing.Size(800, 600)
-        AutoUpdater.Start(AutoUpdaterFile)
-
         'get logged.mdb version
         Dim con As New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
                     .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
@@ -120,8 +109,8 @@ Public Class PacModeS2020
 
         'get ICAOCodes.mdb version
         con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
-                    .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
-                }
+                            .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
+                        }
         Try
             con.Open()
         Catch ex As Exception
@@ -144,7 +133,25 @@ Public Class PacModeS2020
             con.Close()
         End Using
 
-        AddHandler AutoUpdater.CheckForUpdateEvent, AddressOf AutoUpdaterOnCheckForUpdateEvent
+
+        If My.Computer.Network.IsAvailable Then
+            If My.Computer.Network.Ping("www.google.com") Then
+                'Application Upgrade Check
+                Dim BasicAuthentication As BasicAuthentication = New BasicAuthentication("pad", "Blackmrs99")
+                AutoUpdater.BasicAuthXML = BasicAuthentication
+                AutoUpdater.ReportErrors = True
+                AutoUpdater.ShowSkipButton = False
+                'AutoUpdater.Mandatory = True
+                'AutoUpdater.Synchronous = True
+                AutoUpdater.UpdateFormSize = New System.Drawing.Size(800, 600)
+                AutoUpdater.Start(AutoUpdaterFile)
+
+
+                AddHandler AutoUpdater.CheckForUpdateEvent, AddressOf AutoUpdaterOnCheckForUpdateEvent
+            End If
+        Else
+            'MsgBox("Computer is not connected to the internet.")
+        End If
 
         Label7.Text += My.Application.Info.Version.ToString
         Label8.Text += Currentloggedversion.ToString
@@ -194,11 +201,11 @@ Public Class PacModeS2020
 
             Else
                 'MessageBox.Show("There is no update available please try again later.", "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                If My.Computer.Network.Ping("www.google.com") Then
-                    UpgradeCheck("C:\ModeS\ICAOCodes.mdb")
-                Else
-                    MsgBox("Computer is not connected to the internet.")
-                End If
+                'If My.Computer.Network.Ping("www.google.com") Then
+                UpgradeCheck("C:\ModeS\ICAOCodes.mdb")
+                'Else
+                '    MsgBox("Computer is not connected to the internet.")
+                'End If
             End If
         Else
             MessageBox.Show("There is a problem reaching update server please check your internet connection and try again later.", "Update check failed", MessageBoxButtons.OK, MessageBoxIcon.[Error])
