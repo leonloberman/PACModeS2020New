@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="XSD_FILE_PATH">
-    <version>1.0.0.12</version>
+    <version>1.0.0.21</version>
     <url>ftp://pad:Blackmrs99@pad.dns-systems.net/htdocs/members/ModeS/PACModeS2020_Install.exe</url>
 	<changelog>https://www.gfiapac.org/ModeSVersions/PACModeS2020_changelog.htm</changelog>
     <mandatory>false</mandatory>
