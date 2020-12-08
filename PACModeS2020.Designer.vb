@@ -61,6 +61,7 @@ Partial Class PacModeS2020
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -420,11 +421,21 @@ Partial Class PacModeS2020
         Me.CheckBox3.Text = "No Null Operator Flags"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(493, 7)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(135, 13)
+        Me.Label10.TabIndex = 75
+        Me.Label10.Text = "GFIA latest update applied:"
+        '
         'PacModeS2020
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 842)
+        Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.ProgressBar2)
@@ -503,4 +514,5 @@ Partial Class PacModeS2020
     Friend WithEvents Timer2 As Timer
     Friend WithEvents RadioButton10 As RadioButton
     Friend WithEvents CheckBox3 As CheckBox
+    Friend WithEvents Label10 As Label
 End Class

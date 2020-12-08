@@ -58,7 +58,7 @@ Public Class PacModeS2020
     Public Currentloggedversion As Integer
     Public CurrentICAOversion As Integer
     Public AutoUpdaterFile As String = "https://www.gfiapac.org/ModeSVersions/PACModeS2020Version.xml"
-
+    Private LatestGFIAUpdate As Integer
 
 
     Public Shared ReadOnly Property ConnectString1 As String
@@ -133,6 +133,31 @@ Public Class PacModeS2020
             con.Close()
         End Using
 
+        'get GFIA latest update version
+        con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & "") With {
+                            .ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & DBName & ""
+                        }
+        Try
+            con.Open()
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+        End Try
+
+        cmdObj = New OleDbCommand("Select MsSysUpdate from MsSysBuilder", con)
+
+        Using con
+            Try
+                If con.State = ConnectionState.Closed Then con.Open()
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Connection Error")
+            End Try
+            Using GFIAUpdateVersionRdr As OleDbDataReader = cmdObj.ExecuteReader
+                While GFIAUpdateVersionRdr.Read
+                    LatestGFIAUpdate = GFIAUpdateVersionRdr("MsSysUpdate")
+                End While
+            End Using
+            con.Close()
+        End Using
 
         If My.Computer.Network.IsAvailable Then
             If My.Computer.Network.Ping("www.google.com") Then
@@ -156,6 +181,7 @@ Public Class PacModeS2020
         Label7.Text += My.Application.Info.Version.ToString
         Label8.Text += Currentloggedversion.ToString
         Label3.Text += CurrentICAOversion.ToString
+        Label10.Text += LatestGFIAUpdate.ToString
         TextBox1.Text = My.Settings.BSloc
         TextBox2.Text = My.Settings.BSBackupLoc
         BSLoc = My.Settings.BSloc
@@ -484,25 +510,25 @@ BSBackupStep:
 
 
             SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting UserTag = Ps as appropriate", Color.Yellow, 0)
-                AccessSQL("UPDATE Allhex INNER JOIN loggedhex ON (loggedhex.ID = Allhex.AircraftID) SET Allhex.UserTag = " & """Ps""" & ", Allhex.LastModified = Now()" &
+            AccessSQL("UPDATE Allhex INNER JOIN loggedhex ON (loggedhex.ID = Allhex.AircraftID) SET Allhex.UserTag = " & """Ps""" & ", Allhex.LastModified = Now()" &
                         " WHERE (((Allhex.AircraftID)=[loggedhex].[ID]) And ((Allhex.Registration)<>[loggedhex].[Registration]));", DBName)
 
-                'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 1
-                AccessSQL("INSERT INTO Ps_Reset ( Registration, AircraftID, Hex )" &
+            'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 1
+            AccessSQL("INSERT INTO Ps_Reset ( Registration, AircraftID, Hex )" &
                       " SELECT DISTINCT logLLp.Registration,  logLLp.ID AS AircraftID, tbldataset.Hex" &
                       " FROM ((logLLp INNER JOIN tblOperatorHistory ON logLLp.ID = tblOperatorHistory.ID) INNER JOIN tbldataset ON logLLp.ID = tbldataset.ID)" &
                       " INNER JOIN Allhex ON logLLp.ID = Allhex.AircraftID" &
                       " WHERE (((logLLp.Registration) In (select tblOperatorHistory.previous from tblOperatorHistory)));", DBName)
 
-                'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 2
-                AccessSQL("UPDATE Allhex INNER JOIN Ps_Reset ON Allhex.AircraftID = Ps_Reset.AircraftID" &
+            'Removing Ps if previously logged with this registration (i.e. repeated lease) Part 2
+            AccessSQL("UPDATE Allhex INNER JOIN Ps_Reset ON Allhex.AircraftID = Ps_Reset.AircraftID" &
                       " SET allhex.UserTag = NULL, allhex.LastModified = Now()" &
                       " Where allhex.Registration in (select registration from Ps_Reset);", DBName)
-                SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
-            End If
+            SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+        End If
 
-            'Update Allhex with correct Airbus NEO and B737Max ICAO Type codes
-            SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting correct ICAO Type codes for Airbus NEO family", Color.Yellow, 0)
+        'Update Allhex with correct Airbus NEO and B737Max ICAO Type codes
+        SetLabelText_ThreadSafe(Label1, vbCrLf + "Setting correct ICAO Type codes for Airbus NEO family", Color.Yellow, 0)
         AccessSQL("UPDATE Allhex INNER JOIN tbldataset ON Allhex.AircraftID = tbldataset.ID " &
                   "SET Allhex.ICAOTypeCode = 'A20N' WHERE (((tbldataset.FKvariant) in (16897, 9000539)));", DBName)
         AccessSQL("UPDATE Allhex INNER JOIN tbldataset ON Allhex.AircraftID = tbldataset.ID " &
@@ -2036,4 +2062,5 @@ ENDSUB:
             My.Settings.NullOpFlags = False
         End If
     End Sub
+
 End Class
