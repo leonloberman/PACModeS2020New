@@ -21,7 +21,7 @@ Module CheckforUpgrade
         Dim Response As HttpWebResponse = Request.GetResponse
         Dim Stream As Stream = Response.GetResponseStream()
         Dim username As String = "pacmodes2020"
-        Dim password As String = "FkNrELRx"
+        Dim password As String = "NGOenbdS"
         Dim localPath As String = "C:\ModeS\"
         Dim client As New WebClient
         Dim myCache As CredentialCache = New CredentialCache()
