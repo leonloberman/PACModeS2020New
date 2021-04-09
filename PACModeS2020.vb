@@ -603,6 +603,20 @@ BSBackupStep:
             SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
         End If
 
+        SetLabelText_ThreadSafe(Label1, vbCrLf + "Building Type List", Color.Yellow, 0)
+
+        AccessSQL("SELECT DISTINCT tblManufacturer.Builder+' '+tblmodel.Model AS Types INTO TypeList
+                    FROM (tblmodel INNER JOIN tblManufacturer ON tblmodel.UID = tblManufacturer.UID) INNER JOIN tbldataset ON (tblmodel.FKmodel = tbldataset.FKmodel) AND (tblManufacturer.UID = tbldataset.UID)
+                    ORDER BY tblManufacturer.Builder+' '+tblmodel.Model", DBName)
+
+        SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
+        SetLabelText_ThreadSafe(Label1, vbCrLf + "Building Operator List", Color.Yellow, 0)
+
+        AccessSQL("SELECT PRO_tbloperator.FKoperator, PRO_tbloperator.Operator INTO OperatorList
+                    FROM PRO_tbloperator ORDER BY PRO_tbloperator.Operator", DBName)
+
+        SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
 
         'Open connection to BaseStation
         Try
