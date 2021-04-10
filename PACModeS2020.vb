@@ -1172,6 +1172,9 @@ BSBackupStep:
         Allhex_rowcount = dtb.Rows.Count
         SetLabelText_ThreadSafe(Label4, Chr(32) & Allhex_rowcount, Color.White, 0)
 
+        SetLabelText_ThreadSafe(Label2, vbCrLf + "Completed", Color.Green, 0)
+
+
         SetLabelText_ThreadSafe(Label1, vbCrLf + "Load BaseStation Aircraft table in memory", Color.Yellow, 0)
 
         daBSCommand = New SQLiteCommand("INSERT into Aircraft (AircraftID, Modes, ModeSCountry, Registration, SerialNo, ICAOTypecode, UserInt1, UserTag, UserString1, Interested, FirstCreated, LastModified, RegisteredOwners, OperatorFlagCode)" &
