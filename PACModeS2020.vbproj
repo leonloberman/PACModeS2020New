@@ -163,6 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PacModeS2020.ico" />
+    <Content Include="PACModeS2020version.txt" />
+    <Content Include="PACModeS2020Version.xml" />
     <Content Include="PACModeS2020_changelog.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
