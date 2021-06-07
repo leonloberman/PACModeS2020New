@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Basestation.sqb creator for PADG")>
 <Assembly: AssemblyCompany("Leon Loberman for PADG")>
 <Assembly: AssemblyProduct("PACModeS2020")>
-<Assembly: AssemblyCopyright("Copyright Leon Loberman © 2020")>
+<Assembly: AssemblyCopyright("Copyright Leon Loberman © 2021")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.25")>
-<Assembly: AssemblyFileVersion("1.0.0.25")>
+<Assembly: AssemblyVersion("1.0.0.26")>
+<Assembly: AssemblyFileVersion("1.0.0.26")>
